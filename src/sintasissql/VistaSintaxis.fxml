@@ -15,10 +15,10 @@
             <Font name="OCR A Extended" size="26.0" />
          </font>
       </Label>
-      <TableView fx:id="tbResultado" layoutX="58.0" layoutY="143.0" prefHeight="200.0" prefWidth="484.0">
+      <TableView fx:id="tbResultado" layoutX="58.0" layoutY="147.0" prefHeight="200.0" prefWidth="484.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="89.0" text="C2" />
+          <TableColumn id="clToken" fx:id="clToken" prefWidth="138.0" text="Token" />
+          <TableColumn id="clLexicoads" fx:id="clLexico" prefWidth="345.0" text="Lexico" />
         </columns>
       </TableView>
    </children>

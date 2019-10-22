@@ -21,11 +21,11 @@ public class SintaxisController {
 
     @FXML
     private TableView<?> tbResultado;
-
+    
     
     @FXML
     void verificar(KeyEvent event) {
-        if(event.getCode()== KeyCode.ENTER){
+        if(event.getCode()== KeyCode.ENTER){            
             revisarCaracterDB(sentencia.getText());
             
         }
