@@ -6,6 +6,8 @@
 package sintasissql;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -13,6 +15,12 @@ import javafx.scene.input.KeyEvent;
  * @author ayax9
  */
 public class SintaxisController {
+     @FXML
+    private TextField sentencia;
+
+    @FXML
+    private TableView<?> tbResultado;
+
     
     @FXML
     void verificar(KeyEvent event) {
