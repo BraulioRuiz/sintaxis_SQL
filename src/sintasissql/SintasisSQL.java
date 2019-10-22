@@ -5,17 +5,34 @@
  */
 package sintasissql;
 
+import javafx.application.Application;
+import static javafx.application.Application.launch;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 /**
  *
  * @author ayax9
  */
-public class SintasisSQL {
+public class SintasisSQL extends Application{
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+     @Override
+        public void start(Stage primaryStage) throws Exception {
+        Parent proyecto = FXMLLoader.load(getClass().getResource("VistaSintaxis.fxml"));
+        Scene semaforo = new Scene(proyecto);
+        
+        primaryStage.setScene(semaforo);
+        //primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.show();
+    }
+    
+    public static void main(String[]args){
+        launch(args);
     }
     
 }
