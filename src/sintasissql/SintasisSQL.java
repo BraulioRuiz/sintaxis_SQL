@@ -16,23 +16,23 @@ import javafx.stage.Stage;
  *
  * @author ayax9
  */
-public class SintasisSQL extends Application{
+public class SintasisSQL extends Application {
 
     /**
      * @param args the command line arguments
      */
-     @Override
-        public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         Parent proyecto = FXMLLoader.load(getClass().getResource("VistaSintaxis.fxml"));
         Scene semaforo = new Scene(proyecto);
-        
+
         primaryStage.setScene(semaforo);
         //primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
     }
-    
-    public static void main(String[]args){
+
+    public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
