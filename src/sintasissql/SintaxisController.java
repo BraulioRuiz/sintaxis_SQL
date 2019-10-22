@@ -8,6 +8,7 @@ package sintasissql;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -15,7 +16,7 @@ import javafx.scene.input.KeyEvent;
  * @author ayax9
  */
 public class SintaxisController {
-     @FXML
+    @FXML
     private TextField sentencia;
 
     @FXML
@@ -24,7 +25,16 @@ public class SintaxisController {
     
     @FXML
     void verificar(KeyEvent event) {
+        if(event.getCode()== KeyCode.ENTER){
+            revisarCaracterDB(sentencia.getText());
             
+        }
+        
     }
+    
+    private void revisarCaracterDB(String sentencia){
+    
+    }
+    
 
 }
