@@ -16,7 +16,7 @@ public class SintaxisController {
     
     @FXML
     void verificar(KeyEvent event) {
-
+            
     }
 
 }
