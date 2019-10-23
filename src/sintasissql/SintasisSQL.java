@@ -23,7 +23,7 @@ public class SintasisSQL extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent proyecto = FXMLLoader.load(getClass().getResource("VistaSintaxis.fxml"));
+        Parent proyecto = FXMLLoader.load(getClass().getResource("/Views/SintaxisList.fxml"));
         Scene semaforo = new Scene(proyecto);
 
         primaryStage.setScene(semaforo);
