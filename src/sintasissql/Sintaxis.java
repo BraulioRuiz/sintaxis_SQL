@@ -5,6 +5,8 @@
  */
 package sintasissql;
 
+import java.io.File;
+import java.io.IOException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -14,26 +16,14 @@ import javafx.beans.property.StringProperty;
  */
 public class Sintaxis {
     
-    private String reservadas;
-
-    private StringProperty prueba;
-
-    public StringProperty getPrueba() {
-        return prueba;
+    public static void main(String[] args) throws IOException, Exception {
+        String path = new File("src/sintasissql/Lexer.flex").getAbsolutePath();
+        generar(path);
     }
 
-    public void setPrueba(String prueba) {
-        this.prueba = new SimpleStringProperty(prueba);
+    public static void generar(String path) throws IOException, Exception {
+        File file = new File(path);
+        JFlex.Main.generate(file);
     }
-    
-    
-    
-    public String getReservadas() {
-        return reservadas;
-    }
-
-    public void setReservadas(String reservadas) {
-        this.reservadas = reservadas;
-    }  
 
 } 
