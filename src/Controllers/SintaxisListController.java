@@ -5,6 +5,13 @@
  */
 package Controllers;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -19,6 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import sintasissql.Tokens;
 
 /**
  * FXML Controller class
@@ -45,10 +53,11 @@ public class SintaxisListController implements Initializable {
     void verificar(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             limpiar();
-            reservadas(sentencia.getText());
-            caracteres(sentencia.getText());
-            revisarCaracterDB(sentencia.getText());
-            revisarAgrupacion(sentencia.getText());
+            analizarExpRegular();
+            //reservadas(sentencia.getText());
+            //caracteres(sentencia.getText());
+            //revisarCaracterDB(sentencia.getText());
+            //revisarAgrupacion(sentencia.getText());
         }
     }
 
@@ -100,7 +109,6 @@ public class SintaxisListController implements Initializable {
         }
         // clLexico.setCellValueFactory(cellData -> 
         //     new ReadOnlyStringWrapper(cellData.getValue()));
-
     }
 
     private void revisarAgrupacion(String sentencia) {
@@ -130,7 +138,7 @@ public class SintaxisListController implements Initializable {
     }
 
     private void caracteres(String sentencia) {
-        Pattern expresion = Pattern.compile("[A-Z|a-z][a-z|A-Z|_]*[^\\WTABLE|ALTER|CONSTRAINT|ADD|PRIMARY KEY|"
+        Pattern expresion = Pattern.compile("[A-Z|a-z]|[a-z|A-Z_]*[^\\WTABLE|ALTER|CONSTRAINT|ADD|PRIMARY KEY|"
                 + "UNIQUE|FULLTEXT|SPATIAL|FOREING KEY|FIRST|AFTER|INDEX]");
 
         Matcher matcher = expresion.matcher(sentencia);
@@ -145,6 +153,53 @@ public class SintaxisListController implements Initializable {
         Matcher matcher = expresion.matcher(sentencia);
         while (matcher.find()) {
             errores.add(new Label(matcher.group()));
+        }
+    }
+    
+    
+    
+    private void analizarExpRegular() {
+        try {
+            File Archivo = new File("archivo.txt");
+            PrintWriter  escribir;
+            escribir = new PrintWriter(Archivo);
+            escribir.print(sentencia.getText());
+            escribir.close();
+        } catch (FileNotFoundException ex) {
+
+        }
+        try {
+            Reader lector = new BufferedReader(new FileReader("archivo.txt"));
+            Lexico lexer = new Lexico(lector);
+            String resultado = "";
+            while (true) {
+                Tokens tokens = lexer.yylex();
+                if (tokens == null) {
+                    resultado += "FIN";
+                    //sentencia.setText(resultado);
+                    return;
+                }
+                switch (tokens) {
+                    case Caracteres:
+                        caracteres.add(new Label(lexer.yytext()));
+                        break;
+                    case CaracteresTable:
+                        caracteresDB.add(new Label(lexer.yytext()));
+                        break;
+                    case Agrupaciones:
+                        agrupaciones.add(new Label(lexer.yytext()));
+                        break;
+                    case Reservadas:
+                        reservadas.add(new Label(lexer.yytext()));
+                        break;
+                    case ERROR:
+                        errores.add(new Label(lexer.yytext()));
+                        break;                
+                    default:
+                        break;
+                }
+            }
+        } catch (IOException ex) {
         }
     }
 
