@@ -92,7 +92,7 @@ public class SintaxisListController implements Initializable {
     private void revisarCaracterDB(String sentencia) {
         //System.out.println(sentencia);       
 
-        Pattern text = Pattern.compile("[a-z][a-z|_|-|0-9]*");
+        Pattern text = Pattern.compile("[a-z|_|-|0-9][a-z|_|-|0-9]*");
 
         Matcher matcher = text.matcher(sentencia);
         while (matcher.find()) {
@@ -118,7 +118,7 @@ public class SintaxisListController implements Initializable {
     private void reservadas(String sentencia) {
 
         Pattern expresion = Pattern.compile("(TABLE|ALTER|CONSTRAINT|ADD|PRIMARY KEY|"
-                + "UNIQUE|FULLTEXT|SPATIAL|FOREING KEY|FIRST|AFTER|INDEX)");
+                + "UNIQUE|FULLTEXT|SPATIAL|FOREING KEY|FIRST|AFTER|INDEX)[ \\t\\n\\x0B\\f\\r]");
 
         //[A-Z|a-z][a-z|A-Z|_]*
         Matcher matcher = expresion.matcher(sentencia);
