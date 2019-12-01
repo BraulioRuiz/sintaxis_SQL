@@ -197,10 +197,8 @@ public class SintaxisListController implements Initializable {
                     return;
                 }
 
-                int paso = 0;
                 switch (tokens) {
                     case Caracteres:
-                        paso++;
                         boolean mayuscula = false;
 
                         char[] datos = lexer.yytext().toCharArray();
@@ -209,27 +207,47 @@ public class SintaxisListController implements Initializable {
                                 mayuscula = true;
                             }
                         }
-
-                        if (!mayuscula) {
-                            caracteresDB.add(new Label(lexer.yytext()));
+                        if (lexer.yytext().equals(data)) {
+                            if (!mayuscula) {
+                                caracteresDB.add(new Label(lexer.yytext()));
+                            }
+                            caracteres.add(new Label(lexer.yytext()));
+                        } else {
+                            errores.add(new Label(lexer.yytext()));
                         }
-                        caracteres.add(new Label(lexer.yytext()));
+
                         break;
                     case CaracteresTable:
-                        paso++;
-                        caracteresDB.add(new Label(lexer.yytext()));
+                        if (lexer.yytext().equals(data)) {
+                            caracteresDB.add(new Label(lexer.yytext()));
+
+                        } else {
+                            errores.add(new Label(data));
+                        }
                         break;
                     case Agrupaciones:
-                        paso++;
-                        agrupaciones.add(new Label(lexer.yytext()));
+                        if (lexer.yytext().equals(data)) {
+                            agrupaciones.add(new Label(lexer.yytext()));
+
+                        } else {
+                            errores.add(new Label(data));
+                        }
                         break;
                     case Reservadas:
-                        paso++;
-                        reservadas.add(new Label(lexer.yytext()));
+                        if (lexer.yytext().equals(data)) {
+                            reservadas.add(new Label(lexer.yytext()));
+
+                        } else {
+                            errores.add(new Label(data));
+                        }
                         break;
                     case ERROR:
-                        paso++;
-                        errores.add(new Label(lexer.yytext()));
+                        if (lexer.yytext().equals(data)) {
+                            errores.add(new Label(data));
+
+                        } else {
+                            errores.add(new Label(data));
+                        }
                         break;
                     default:
                         break;
@@ -244,13 +262,13 @@ public class SintaxisListController implements Initializable {
 
         for (String dato : data) {
             if (reservadas(dato)) {
-                
+
             } else if (caracteres(dato)) {
-               
+
             } else if (revisarCaracterDB(dato)) {
-              
+
             } else if (revisarAgrupacion(dato)) {
-               
+
             }
         }
 

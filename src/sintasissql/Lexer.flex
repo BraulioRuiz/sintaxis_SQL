@@ -38,6 +38,6 @@ E = " "
 "(" {lexeme=yytext(); return Agrupaciones ;}
 ")" {lexeme=yytext(); return Agrupaciones ;}
 
- ^a\(({LL})({L})*)a$ {lexeme=yytext(); return Caracteres;}
+({LL})({L})* {lexeme=yytext(); return Caracteres;}
 ({LLL})({LLLLL})* |({LLLL})({LLLLL})+  {lexeme=yytext(); return CaracteresTable;}
 . {return ERROR;}
