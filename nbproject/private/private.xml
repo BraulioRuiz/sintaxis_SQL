@@ -5,7 +5,7 @@
         <group>
             <file>file:/C:/Users/JulioCaballero/Documents/GitHub/sintaxis_SQL/src/sintasissql/Sintaxis.java</file>
             <file>file:/C:/Users/JulioCaballero/Documents/GitHub/sintaxis_SQL/src/Controllers/SintaxisListController.java</file>
-            <file>file:/C:/Users/JulioCaballero/Documents/GitHub/sintaxis_SQL/src/sintasissql/Tokens.java</file>
+            <file>file:/C:/Users/JulioCaballero/Documents/GitHub/sintaxis_SQL/src/sintasissql/SintasisSQL.java</file>
             <file>file:/C:/Users/JulioCaballero/Documents/GitHub/sintaxis_SQL/src/sintasissql/Lexer.flex</file>
         </group>
     </open-files>
