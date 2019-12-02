@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import sintasissql.Tokens;
+import java.util.Stack;
 
 /**
  * FXML Controller class
@@ -48,6 +49,9 @@ public class SintaxisListController implements Initializable {
 
     @FXML
     private TextField sentencia;
+
+    private Stack<String> stack = new Stack<String>();
+    private Stack<String> stack2 = new Stack<String>();
 
     @FXML
     void verificar(KeyEvent event) {
@@ -85,6 +89,7 @@ public class SintaxisListController implements Initializable {
         lvAgrupaciones.setItems(agrupaciones);
         lvReservadas.setItems(reservadas);
         lvErrores.setItems(errores);
+        sentencia.setText("ALTER TABLE nombre ADD nombre [ FIRST nombre ]");
         limpiar();
     }
 
@@ -169,13 +174,25 @@ public class SintaxisListController implements Initializable {
 
     private void separar() {
         String[] data = sentencia.getText().split(" ");
-
+        String lexer = "";
         for (String dato : data) {
-            analizarExpRegular(dato);
+            lexer += analizarExpRegular(dato);
+        }
+
+        System.out.println("Datos lexico: " + lexer);
+
+        String[] lexers = lexer.split(" ");
+
+        String error = "";
+
+        if (pilagramatica1(lexers, error)) {
+            System.out.println("La sintaxis es valida: " + error);
+        } else {
+            System.out.println("La sintaxis es invalida: " + error);
         }
     }
 
-    private void analizarExpRegular(String data) {
+    private String analizarExpRegular(String data) {
         try {
             File Archivo = new File("archivo.txt");
             PrintWriter escribir;
@@ -194,8 +211,11 @@ public class SintaxisListController implements Initializable {
                 if (tokens == null) {
                     resultado += "FIN";
                     //sentencia.setText(resultado);
-                    return;
+                    return "";
                 }
+
+                boolean caracter = false;
+                boolean caracterdb = false;
 
                 switch (tokens) {
                     case Caracteres:
@@ -210,17 +230,19 @@ public class SintaxisListController implements Initializable {
                         if (lexer.yytext().equals(data)) {
                             if (!mayuscula) {
                                 caracteresDB.add(new Label(lexer.yytext()));
+                                caracterdb = true;
                             }
                             caracteres.add(new Label(lexer.yytext()));
+                            caracter = true;
                         } else {
-                            errores.add(new Label(lexer.yytext()));
+                            errores.add(new Label(data));
                         }
 
                         break;
                     case CaracteresTable:
                         if (lexer.yytext().equals(data)) {
                             caracteresDB.add(new Label(lexer.yytext()));
-
+                            caracterdb = true;
                         } else {
                             errores.add(new Label(data));
                         }
@@ -244,7 +266,6 @@ public class SintaxisListController implements Initializable {
                     case ERROR:
                         if (lexer.yytext().equals(data)) {
                             errores.add(new Label(data));
-
                         } else {
                             errores.add(new Label(data));
                         }
@@ -252,9 +273,20 @@ public class SintaxisListController implements Initializable {
                     default:
                         break;
                 }
+
+                if (caracterdb && caracter) {
+                    return "*Caracter ";
+                } else if (caracterdb) {
+                    return "TituloCaracter ";
+                } else if (caracter) {
+                    return "Caracter ";
+                } else {
+                    return data + " ";
+                }
             }
         } catch (IOException ex) {
         }
+        return "";
     }
 
     private void prueba(String text) {
@@ -272,6 +304,54 @@ public class SintaxisListController implements Initializable {
             }
         }
 
+    }
+
+    private boolean pilagramatica1(String[] data, String error) {
+        stack.push("ALTER");
+        stack.push("TABLE");
+        stack.push("TituloCaracter");
+        stack.push("ADD");
+        stack.push("Caracter");
+        stack.push("[");
+        stack.push("FIRST|AFTER");
+        stack.push("Caracter");
+        stack.push("]");
+
+        while (!stack.isEmpty()) {
+            stack2.push(stack.pop());
+        }
+
+        int dato = 1;
+        stack2.pop();
+        stack2.pop();
+        
+        while (!stack2.isEmpty() && dato < data.length) {
+          
+            System.out.println("Errorr : " + stack2.peek());
+            
+             
+            if (!stack2.peek().equals(data[++dato])) {
+                if (dato == 2 && data[2].equals("*Caracter")) {
+                } else if (dato == 4 && (data[4]).equals("*Caracter")) {
+                } else if (dato == 6 && ((data[6]).equals("FIRST") || (data[6]).equals("AFTER"))) {
+                } else if (dato == 7 && data[7].equals("*Caracter")) {
+                } else {
+                    return false;
+                }
+            }
+
+            stack2.pop();
+
+        }
+
+        return stack2.isEmpty();
+
+    }
+
+    private void ejecutargramatica(String[] data) {
+        while (!stack2.isEmpty()) {
+
+        }
     }
 
 }

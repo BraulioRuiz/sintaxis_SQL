@@ -12,14 +12,12 @@ LLLLL=[a-z_0-9-]
 LLLLLL=[a-zA-Z_0-9-]+
 LLLLLLL=[^a-zA-Z_0-9-]+
 espacio=[ ,\t,\r,\n]+
-E = " "
 
 %{
     public String lexeme;
 %}
 %%
-"ALTER" {lexeme=yytext(); return Reservadas;}
-"TABLE" {lexeme=yytext(); return Reservadas;}
+"ALTER TABLE" {lexeme=yytext(); return Reservadas;}
 "ADD" {lexeme=yytext(); return Reservadas;}
 "CONSTRAINT" {lexeme=yytext(); return Reservadas;}
 "PRIMARY KEY" {lexeme=yytext(); return Reservadas;}
