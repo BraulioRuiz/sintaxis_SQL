@@ -28,6 +28,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import sintasissql.Tokens;
 import java.util.Stack;
+import javafx.event.ActionEvent;
+import javafx.scene.control.TextArea;
 
 /**
  * FXML Controller class
@@ -49,9 +51,18 @@ public class SintaxisListController implements Initializable {
 
     @FXML
     private TextField sentencia;
+    @FXML
+    private TextArea txaSintaxis;
 
     private Stack<String> stack = new Stack<String>();
     private Stack<String> stack2 = new Stack<String>();
+
+    @FXML
+    void verificar2(ActionEvent event) {
+        limpiar();
+
+        separar();
+    }
 
     @FXML
     void verificar(KeyEvent event) {
@@ -104,6 +115,7 @@ public class SintaxisListController implements Initializable {
         lvReservadas.refresh();
         lvErrores.getItems().clear();
         lvErrores.refresh();
+        txaSintaxis.clear();
     }
 
     private boolean revisarCaracterDB(String sentencia) {
@@ -175,20 +187,32 @@ public class SintaxisListController implements Initializable {
     private void separar() {
         String[] data = sentencia.getText().split(" ");
         String lexer = "";
-        for (String dato : data) {
-            lexer += analizarExpRegular(dato);
+        String[] lexers1;
+        data = cortarSentencia(data, "ALTER", "TABLE");
+        data = cortarSentencia(data, "PRIMARY", "KEY");
+        data = cortarSentencia(data, "FOREIGN", "KEY");
+
+        String[] lexers = new String[data.length];
+
+        for (int i = 0; i < data.length; i++) {
+            lexers[i] = analizarExpRegular(data[i]);
+            lexer += lexers[i] + " ";
         }
 
-        System.out.println("Datos lexico: " + lexer);
-
-        String[] lexers = lexer.split(" ");
-
         String error = "";
+        
+        int x = inicio(lexers,error); 
 
         if (pilagramatica1(lexers, error)) {
-            System.out.println("La sintaxis es valida: " + error);
-        } else {
-            System.out.println("La sintaxis es invalida: " + error);
+            if (lexers.length > 8) {
+                txaSintaxis.appendText("La sintaxis es invalida \n");
+            }else {
+                txaSintaxis.appendText("La sintaxis es valida \n");
+            }
+        } else if( x > 0) {
+            pilagramatica2(lexers,error,x);
+        }else {
+            txaSintaxis.appendText("La sintaxis es invalida \n");
         }
     }
 
@@ -206,84 +230,84 @@ public class SintaxisListController implements Initializable {
             Reader lector = new BufferedReader(new FileReader("archivo.txt"));
             Lexico lexer = new Lexico(lector);
             String resultado = "";
-            while (true) {
-                Tokens tokens = lexer.yylex();
-                if (tokens == null) {
-                    resultado += "FIN";
-                    //sentencia.setText(resultado);
-                    return "";
-                }
+            // while (true) {
+            Tokens tokens = lexer.yylex();
+            if (tokens == null) {
+                resultado += "FIN";
+                //sentencia.setText(resultado);
+                return "";
+            }
 
-                boolean caracter = false;
-                boolean caracterdb = false;
+            boolean caracter = false;
+            boolean caracterdb = false;
 
-                switch (tokens) {
-                    case Caracteres:
-                        boolean mayuscula = false;
+            switch (tokens) {
+                case Caracteres:
+                    boolean mayuscula = false;
 
-                        char[] datos = lexer.yytext().toCharArray();
-                        for (int i = 0; i < datos.length; i++) {
-                            if (Character.isUpperCase(datos[i])) {
-                                mayuscula = true;
-                            }
+                    char[] datos = lexer.yytext().toCharArray();
+                    for (int i = 0; i < datos.length; i++) {
+                        if (Character.isUpperCase(datos[i])) {
+                            mayuscula = true;
                         }
-                        if (lexer.yytext().equals(data)) {
-                            if (!mayuscula) {
-                                caracteresDB.add(new Label(lexer.yytext()));
-                                caracterdb = true;
-                            }
-                            caracteres.add(new Label(lexer.yytext()));
-                            caracter = true;
-                        } else {
-                            errores.add(new Label(data));
-                        }
-
-                        break;
-                    case CaracteresTable:
-                        if (lexer.yytext().equals(data)) {
+                    }
+                    if (lexer.yytext().equals(data)) {
+                        if (!mayuscula) {
                             caracteresDB.add(new Label(lexer.yytext()));
                             caracterdb = true;
-                        } else {
-                            errores.add(new Label(data));
                         }
-                        break;
-                    case Agrupaciones:
-                        if (lexer.yytext().equals(data)) {
-                            agrupaciones.add(new Label(lexer.yytext()));
+                        caracteres.add(new Label(lexer.yytext()));
+                        caracter = true;
+                    } else {
+                        errores.add(new Label(data));
+                    }
 
-                        } else {
-                            errores.add(new Label(data));
-                        }
-                        break;
-                    case Reservadas:
-                        if (lexer.yytext().equals(data)) {
-                            reservadas.add(new Label(lexer.yytext()));
+                    break;
+                case CaracteresTable:
+                    if (lexer.yytext().equals(data)) {
+                        caracteresDB.add(new Label(lexer.yytext()));
+                        caracterdb = true;
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case Agrupaciones:
+                    if (lexer.yytext().equals(data)) {
+                        agrupaciones.add(new Label(lexer.yytext()));
 
-                        } else {
-                            errores.add(new Label(data));
-                        }
-                        break;
-                    case ERROR:
-                        if (lexer.yytext().equals(data)) {
-                            errores.add(new Label(data));
-                        } else {
-                            errores.add(new Label(data));
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case Reservadas:
+                    if (lexer.yytext().equals(data)) {
+                        reservadas.add(new Label(lexer.yytext()));
 
-                if (caracterdb && caracter) {
-                    return "*Caracter ";
-                } else if (caracterdb) {
-                    return "TituloCaracter ";
-                } else if (caracter) {
-                    return "Caracter ";
-                } else {
-                    return data + " ";
-                }
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case ERROR:
+                    if (lexer.yytext().equals(data)) {
+                        errores.add(new Label(data));
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                default:
+                    break;
             }
+
+            if (caracterdb && caracter) {
+                return "*Caracter";
+            } else if (caracterdb) {
+                return "TituloCaracter";
+            } else if (caracter) {
+                return "Caracter";
+            } else {
+                return data;
+            }
+            // }
         } catch (IOException ex) {
         }
         return "";
@@ -307,8 +331,9 @@ public class SintaxisListController implements Initializable {
     }
 
     private boolean pilagramatica1(String[] data, String error) {
-        stack.push("ALTER");
-        stack.push("TABLE");
+        stack.clear();
+        stack2.clear();
+        stack.push("ALTER TABLE");
         stack.push("TituloCaracter");
         stack.push("ADD");
         stack.push("Caracter");
@@ -321,21 +346,19 @@ public class SintaxisListController implements Initializable {
             stack2.push(stack.pop());
         }
 
-        int dato = 1;
-        stack2.pop();
-        stack2.pop();
-        
-        while (!stack2.isEmpty() && dato < data.length) {
-          
-            System.out.println("Errorr : " + stack2.peek());
-            
-             
-            if (!stack2.peek().equals(data[++dato])) {
-                if (dato == 2 && data[2].equals("*Caracter")) {
-                } else if (dato == 4 && (data[4]).equals("*Caracter")) {
-                } else if (dato == 6 && ((data[6]).equals("FIRST") || (data[6]).equals("AFTER"))) {
-                } else if (dato == 7 && data[7].equals("*Caracter")) {
+        int dato = -1;
+
+        while (!stack2.isEmpty() && (dato + 1) < data.length) {
+
+            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+
+            if (!(stack2.peek()).equals(data[++dato])) {
+                if (dato == 1 && data[1].equals("*Caracter")) {
+                } else if (dato == 3 && (data[3]).equals("*Caracter")) {
+                } else if (dato == 5 && ((data[5]).equals("FIRST") || (data[6]).equals("AFTER"))) {
+                } else if (dato == 6 && data[6].equals("*Caracter")) {
                 } else {
+                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
                     return false;
                 }
             }
@@ -353,5 +376,111 @@ public class SintaxisListController implements Initializable {
 
         }
     }
+
+    private String[] cortarSentencia(String[] data, String name, String name2) {
+        String text;
+        String[] nuevo = new String[data.length - 1];
+        boolean aux = false;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals(name)) {
+                if ((i + 1) < data.length && data[i + 1].equals(name2)) {
+                    text = name + " " + name2;
+                    for (int x = 0; x < i; x++) {
+                        nuevo[x] = data[x];
+                    }
+
+                    nuevo[i] = text;
+
+                    for (int y = i + 1; y < nuevo.length; y++) {
+                        if ((y + 1) < data.length) {
+                            nuevo[y] = data[y + 1];
+                        }
+                    }
+                    aux = true;
+
+                }
+
+            }
+        }
+
+        if (aux) {
+            return nuevo;
+        } else {
+            return data;
+        }
+
+    }
+    
+    private int inicio(String[] data, String error) {
+        stack.clear();
+        stack2.clear();
+        stack.push("ALTER TABLE");
+        stack.push("TituloCaracter");
+        stack.push("ADD");
+        
+        while (!stack.isEmpty()) {
+            stack2.push(stack.pop());
+        }
+        
+        int dato = -1;
+
+        while (!stack2.isEmpty() && (dato + 1) < data.length) {
+
+            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+
+            if (!(stack2.peek()).equals(data[++dato])) {
+                if (dato == 1 && data[1].equals("*Caracter")) {
+                } else {
+                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
+                    return 0;
+                }
+            }
+
+            stack2.pop();
+
+        }
+
+        if(stack2.isEmpty())
+            return dato;
+        else 
+            return 0;
+
+    }
+    
+    
+    private boolean pilagramatica2(String[] data, String error, int x) {
+        stack.clear();
+        stack2.clear();
+        stack.push("(");
+        stack.push("Caracter");
+        stack.push(",|)");
+
+        while (!stack.isEmpty()) {
+            stack2.push(stack.pop());
+        }
+
+        int dato = x;
+
+        while (!stack2.isEmpty() && (dato + 1) < data.length) {
+
+            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+
+            if (!(stack2.peek()).equals(data[++dato])) {
+                if (dato == x+2 && data[x+2].equals("*Caracter")) {
+                } else if (dato == x+3 && (data[x+2]).equals(",")) {
+                }else{
+                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
+                    return false;
+                }
+            }
+
+            stack2.pop();
+
+        }
+
+        return stack2.isEmpty();
+
+    }
+
 
 }
