@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
-
+package sintasissql;
+import Controllers.Lexico;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import sintasissql.Tokens;
+import Controllers.Tokens;
 import java.util.Stack;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
