@@ -1,14 +1,13 @@
-package sintasissql;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Controllers;
 
 /**
  *
- * @author JulioCaballero
+ * @author marti
  */
 public enum Tokens2 {
     ALTERTABLE,
@@ -29,5 +28,6 @@ public enum Tokens2 {
     CPAR,
     TituloCaracter,
     CCaracter,
+    Caracter,
     ERROR
 }

@@ -7,13 +7,12 @@ package sintasissql;
 
 import java.io.File;
 import java.io.IOException;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.*;
+import java_cup.runtime.*;
+
 
 /**
  *
@@ -21,11 +20,11 @@ import java.nio.file.Paths;
  */
 public class Sintaxis {
 
-     public static void main(String[] args) throws IOException, Exception {
+     public static void main(String[] args) throws Exception {
         String path = new File("src/sintasissql/Lexer2.flex").getAbsolutePath();
         String path2 = new File("src/sintasissql/LexerCup.flex").getAbsolutePath();
         String path3 = new File("src/sintasissql/Sintax.cup").getAbsolutePath();
-        String[] rutas = {"-parser", "Sintax", path3};
+        String[] rutas = {"-parser", "Sintax",new File("src/sintasissql/Sintax.cup").getAbsolutePath()};
         generar(path, path2, rutas);
     }
 
@@ -36,10 +35,12 @@ public class Sintaxis {
         archivo = new File(ruta);
         JFlex.Main.generate(archivo);
         java_cup.Main.main(rutas);
+        
         Path rutaSym = Paths.get(new File("src/sintasissql/sym.java").getAbsolutePath());
         if (Files.exists(rutaSym)) {
             Files.delete(rutaSym);
         }
+        
         Files.move(Paths.get(new File("sym.java").getAbsolutePath()),
                 Paths.get(new File("src/sintasissql/sym.java").getAbsolutePath()));
 
@@ -50,6 +51,6 @@ public class Sintaxis {
         Files.move(Paths.get(new File("Sintax.java").getAbsolutePath()),
                 Paths.get(new File("src/sintasissql/Sintax.java").getAbsolutePath()));
 
-    }
+        }
 
 }

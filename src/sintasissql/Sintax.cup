@@ -15,40 +15,25 @@ parser code
 }
 :};
 
-terminal ALTER_TABLE,
-    ADD,
-    CONSTRAINT,
-    PRIMARY_KEY,
-    UNIQUE,
-    FULLTEXT,
-    SPATIAL,
-    FOREING_KEY,
-    FIRST,
-    AFTER,
-    INDEX,
-    ICOR,
-    CCOR,
-    COMA,
-    IPAR,
-    CPAR,
-    TituloCaracter,
-    CCaracter,
-    ERROR; 
+terminal ALTERTABLE , ADD , CONSTRAINT , PRIMARYKEY , UNIQUE , FULLTEXT ,  SPATIAL ,
+    FOREINGKEY , FIRST , AFTER , INDEX , ICOR , CCOR , COMA , IPAR , CPAR , TituloCaracter ,
+    CCaracter , ERROR ;
 
-non terminal INICIO, ESPECIFICACION, TIPODATO2 , CaracterT, CaracterC;
+non terminal SENTENCIA , ESPECIFICACION, TIPODATO2 , CaracterT, CaracterC ;
 
-start with INICIO;
+start with SENTENCIA ;
 
 SENTENCIA ::= 
-    ALTER TABLE CaracterT ADD ESPECIFICACION 
+    ALTERTABLE CaracterT ADD ESPECIFICACION 
 ;
 
-TIPODATO2 ::= FIRST | AFTER ;
+
 
 ESPECIFICACION ::= 
    CaracterT ICOR TIPODATO2 CaracterT CCOR
 ;
 
+TIPODATO2 ::= FIRST | AFTER ;
 
 CaracterT ::= 
     CCaracter  |

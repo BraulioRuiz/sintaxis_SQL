@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sintasissql;
+package Controllers;
 import Controllers.Lexico;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +27,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import Controllers.Tokens;
+import java.io.StringReader;
 import java.util.Stack;
+import java_cup.runtime.Symbol;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 
@@ -70,6 +72,8 @@ public class SintaxisListController implements Initializable {
             limpiar();
 
             separar();
+            
+            validacion();
             //prueba(sentencia.getText());
             //analizarExpRegular();
             //reservadas(sentencia.getText());
@@ -203,7 +207,7 @@ public class SintaxisListController implements Initializable {
         
         int x = inicio(lexers,error); 
 
-        if (pilagramatica1(lexers, error)) {
+     /*   if (pilagramatica1(lexers, error)) {
             if (lexers.length > 8) {
                 txaSintaxis.appendText("La sintaxis es invalida \n");
             }else {
@@ -213,7 +217,7 @@ public class SintaxisListController implements Initializable {
             pilagramatica2(lexers,error,x);
         }else {
             txaSintaxis.appendText("La sintaxis es invalida \n");
-        }
+        }*/
     }
 
     private String analizarExpRegular(String data) {
@@ -350,7 +354,7 @@ public class SintaxisListController implements Initializable {
 
         while (!stack2.isEmpty() && (dato + 1) < data.length) {
 
-            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+       //     txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
 
             if (!(stack2.peek()).equals(data[++dato])) {
                 if (dato == 1 && data[1].equals("*Caracter")) {
@@ -358,7 +362,7 @@ public class SintaxisListController implements Initializable {
                 } else if (dato == 5 && ((data[5]).equals("FIRST") || (data[6]).equals("AFTER"))) {
                 } else if (dato == 6 && data[6].equals("*Caracter")) {
                 } else {
-                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
+         //           txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
                     return false;
                 }
             }
@@ -426,12 +430,12 @@ public class SintaxisListController implements Initializable {
 
         while (!stack2.isEmpty() && (dato + 1) < data.length) {
 
-            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+       //     txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
 
             if (!(stack2.peek()).equals(data[++dato])) {
                 if (dato == 1 && data[1].equals("*Caracter")) {
                 } else {
-                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
+           //         txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
                     return 0;
                 }
             }
@@ -445,6 +449,20 @@ public class SintaxisListController implements Initializable {
         else 
             return 0;
 
+    }
+    
+    public void validacion(){
+        String st = sentencia.getText();
+        Sintax s = new Sintax(new LexerCup(new StringReader(st)));
+        try {
+            s.parse();
+            txaSintaxis.setText("La sentencia es valida");
+           
+        } catch (Exception ex) {
+            Symbol sym = s.getS();
+            txaSintaxis.setText("La sentencia es invalida");
+     
+        }
     }
     
     
@@ -463,13 +481,13 @@ public class SintaxisListController implements Initializable {
 
         while (!stack2.isEmpty() && (dato + 1) < data.length) {
 
-            txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
+           // txaSintaxis.appendText("Tope pila: " + stack2.peek() + "\n");
 
             if (!(stack2.peek()).equals(data[++dato])) {
                 if (dato == x+2 && data[x+2].equals("*Caracter")) {
                 } else if (dato == x+3 && (data[x+2]).equals(",")) {
                 }else{
-                    txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
+                 //   txaSintaxis.appendText("Error sintaxis: " + data[dato] + "\n");
                     return false;
                 }
             }
