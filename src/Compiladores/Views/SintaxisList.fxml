@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SintaxisListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Compiladores.Controllers.SintaxisListController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="103.0" prefHeight="340.0" prefWidth="519.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="224.0" AnchorPane.topAnchor="103.0">
          <children>
@@ -26,20 +26,26 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="610.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Caracteres" />
-                  <Label alignment="CENTER" prefHeight="39.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="CaracteresDB" />
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Caracteres " />
+                  <Label alignment="CENTER" prefHeight="39.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Operadores" />
                   <Label alignment="CENTER" prefHeight="35.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Agrupaciones" />
                   <Label alignment="CENTER" prefHeight="37.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Reservadas" />
                   <Label alignment="CENTER" prefHeight="55.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Errores" />
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Digitos" />
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="DB" />
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="123.0" style="-fx-border-color: white; -fx-background-color: orange;" text="Columnas" />
                </children>
             </HBox>
             <HBox prefHeight="350.0" prefWidth="610.0">
                <children>
                   <ListView fx:id="lvCaracteres" maxWidth="350.0" prefHeight="122.0" />
-                  <ListView fx:id="lvCaracteresDB" maxWidth="350.0" prefHeight="122.0" />
+                  <ListView fx:id="lvOperadores" maxWidth="350.0" prefHeight="122.0" />
                   <ListView fx:id="lvAgrupaciones" maxWidth="350.0" prefHeight="122.0" />
                   <ListView fx:id="lvReservadas" maxWidth="350.0" prefHeight="122.0" />
                   <ListView fx:id="lvErrores" maxWidth="350.0" prefHeight="122.0" />
+                  <ListView fx:id="lvDigitos" maxWidth="350.0" prefHeight="122.0" />
+                  <ListView fx:id="lvDB" maxWidth="350.0" prefHeight="122.0" />
+                  <ListView fx:id="lvColumnas" maxWidth="350.0" prefHeight="122.0" />
                </children>
             </HBox>
          </children>

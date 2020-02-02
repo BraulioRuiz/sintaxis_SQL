@@ -4,38 +4,39 @@ import static Compiladores.Main.Tokens.*;
 %%
 %class Lexico
 %type Tokens
-LL=[a-zA-Z]
-L=[a-zA-Z_0-9]
-LLL=[a-z0-9]
-LLLL=[_-]
-LLLLL=[a-z_0-9-]
-LLLLLL=[a-zA-Z_0-9-]+
-LLLLLLL=[^a-zA-Z_0-9-]+
+L=[a-zA-Z_0-9-]
+Lm=[-a-z_0-9]
 espacio=[ ,\t,\r,\n]+
-
+D=[0-9]
 %{
     public String lexeme;
 %}
 %%
-"ALTER TABLE" {lexeme=yytext(); return Reservadas;}
-"ADD" {lexeme=yytext(); return Reservadas;}
-"CONSTRAINT" {lexeme=yytext(); return Reservadas;}
-"PRIMARY KEY" {lexeme=yytext(); return Reservadas;}
-"UNIQUE" {lexeme=yytext(); return Reservadas;}
-"FULLTEXT" {lexeme=yytext(); return Reservadas;}
-"SPATIAL" {lexeme=yytext(); return Reservadas;}
-"FOREING KEY" {lexeme=yytext(); return Reservadas;}
-"FIRST" {lexeme=yytext(); return Reservadas;}
-"AFTER" {lexeme=yytext(); return Reservadas;}
-"INDEX" {lexeme=yytext(); return Reservadas;}
+"SELECT" {lexeme=yytext(); return Reservadas;}
+"DISTINCT" {lexeme=yytext(); return Reservadas;}
+"FROM" {lexeme=yytext(); return Reservadas;}
+"WHERE" {lexeme=yytext(); return Reservadas;}
+"ORDER BY" {lexeme=yytext(); return Reservadas;}
+
 
 "//".* {/*Ignore*/}
-"[" {lexeme=yytext(); return Agrupaciones ;}
-"]" {lexeme=yytext(); return Agrupaciones ;}
-("," | ", ") {lexeme=yytext(); return Agrupaciones ;}
-"(" {lexeme=yytext(); return Agrupaciones ;}
-")" {lexeme=yytext(); return Agrupaciones ;}
+"'" {lexeme=yytext(); return Agrupaciones ;}
+"'" {lexeme=yytext(); return Agrupaciones ;}
+"," {lexeme=yytext(); return Agrupaciones ;}
+"." {lexeme=yytext(); return Agrupaciones ;}
+":" {lexeme=yytext(); return Agrupaciones ;}
+";" {lexeme=yytext(); return Agrupaciones ;}
+"/" {lexeme=yytext(); return Agrupaciones ;}
 
-({LL})({L})* {lexeme=yytext(); return Caracteres;}
-({LLL})({LLLLL})* |({LLLL})({LLLLL})+  {lexeme=yytext(); return CaracteresTable;}
+"<" {lexeme=yytext(); return Operadores ;}
+"<=" {lexeme=yytext(); return Operadores ;}
+">=" {lexeme=yytext(); return Operadores ;}
+">" {lexeme=yytext(); return Operadores ;}
+"!=" {lexeme=yytext(); return Operadores ;}
+"=" {lexeme=yytext(); return Operadores ;}
+"*" {lexeme=yytext(); return Columnas ;}
+({L})({L})+ {lexeme=yytext(); return Caracteres;}
+({L})({L})+ {lexeme=yytext(); return Columnas;}
+({D})({D})+  {lexeme=yytext(); return Digitos;}
+({Lm})({Lm})+  {lexeme=yytext(); return DB;}
 . {return ERROR;}

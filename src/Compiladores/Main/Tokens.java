@@ -13,8 +13,11 @@ import Controllers.*;
  */
 public enum Tokens {
     Caracteres,
-    CaracteresTable,
     Agrupaciones,
     Reservadas,
+    Operadores,
+    Digitos,
+    DB,
+    Columnas,
     ERROR
 }

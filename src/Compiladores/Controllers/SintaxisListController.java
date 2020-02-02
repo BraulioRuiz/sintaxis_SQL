@@ -44,7 +44,7 @@ public class SintaxisListController implements Initializable {
     @FXML
     private ListView<Label> lvCaracteres;
     @FXML
-    private ListView<Label> lvCaracteresDB;
+    private ListView<Label> lvOperadores;
     @FXML
     private ListView<Label> lvAgrupaciones;
     @FXML
@@ -56,6 +56,15 @@ public class SintaxisListController implements Initializable {
     private TextField sentencia;
     @FXML
     private TextArea txaSintaxis;
+    
+    @FXML
+    private ListView<Label> lvDigitos;
+
+    @FXML
+    private ListView<Label> lvDB;
+    
+    @FXML
+    private ListView<Label> lvColumnas;
 
     private Stack<String> stack = new Stack<String>();
     private Stack<String> stack2 = new Stack<String>();
@@ -85,10 +94,13 @@ public class SintaxisListController implements Initializable {
     }
 
     private ObservableList<Label> caracteres;
-    private ObservableList<Label> caracteresDB;
+    private ObservableList<Label> operadores;
     private ObservableList<Label> agrupaciones;
     private ObservableList<Label> reservadas;
+    private ObservableList<Label> DB;
+    private ObservableList<Label> digitos;
     private ObservableList<Label> errores;
+    private ObservableList<Label> columnas;
 
     /**
      * Initializes the controller class.
@@ -96,15 +108,21 @@ public class SintaxisListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         caracteres = FXCollections.observableArrayList();
-        caracteresDB = FXCollections.observableArrayList();
+        operadores = FXCollections.observableArrayList();
         agrupaciones = FXCollections.observableArrayList();
         reservadas = FXCollections.observableArrayList();
         errores = FXCollections.observableArrayList();
+        digitos = FXCollections.observableArrayList();
+        columnas = FXCollections.observableArrayList();
+        DB = FXCollections.observableArrayList();
         lvCaracteres.setItems(caracteres);
-        lvCaracteresDB.setItems(caracteresDB);
+        lvOperadores.setItems(operadores);
         lvAgrupaciones.setItems(agrupaciones);
         lvReservadas.setItems(reservadas);
         lvErrores.setItems(errores);
+        lvDigitos.setItems(digitos);
+        lvDB.setItems(DB);
+        lvColumnas.setItems(columnas);
         sentencia.setText("ALTER TABLE nombre ADD nombre [ FIRST nombre ]");
         limpiar();
     }
@@ -112,8 +130,8 @@ public class SintaxisListController implements Initializable {
     private void limpiar() {
         lvCaracteres.getItems().clear();
         lvCaracteres.refresh();
-        lvCaracteresDB.getItems().clear();
-        lvCaracteresDB.refresh();
+        lvOperadores.getItems().clear();
+        lvOperadores.refresh();
         lvAgrupaciones.getItems().clear();
         lvAgrupaciones.refresh();
         lvReservadas.getItems().clear();
@@ -121,6 +139,9 @@ public class SintaxisListController implements Initializable {
         lvErrores.getItems().clear();
         lvErrores.refresh();
         txaSintaxis.clear();
+        lvDB.getItems().clear();
+        lvDigitos.getItems().clear();
+        lvColumnas.getItems().clear();
     }
 
     private boolean revisarCaracterDB(String sentencia) {
@@ -130,7 +151,7 @@ public class SintaxisListController implements Initializable {
 
         Matcher matcher = text.matcher(sentencia);
         while (matcher.find()) {
-            caracteresDB.add(new Label(matcher.group()));
+        //    caracteresDB.add(new Label(matcher.group()));
             valor = true;
         }
 
@@ -193,9 +214,7 @@ public class SintaxisListController implements Initializable {
         String[] data = sentencia.getText().split(" ");
         String lexer = "";
         String[] lexers1;
-        data = cortarSentencia(data, "ALTER", "TABLE");
-        data = cortarSentencia(data, "PRIMARY", "KEY");
-        data = cortarSentencia(data, "FOREIGN", "KEY");
+        data = cortarSentencia(data, "ORDER", "BY");
 
         String[] lexers = new String[data.length];
 
@@ -258,19 +277,45 @@ public class SintaxisListController implements Initializable {
                     }
                     if (lexer.yytext().equals(data)) {
                         if (!mayuscula) {
-                            caracteresDB.add(new Label(lexer.yytext()));
+                            DB.add(new Label(lexer.yytext()));
                             caracterdb = true;
                         }
                         caracteres.add(new Label(lexer.yytext()));
+                        columnas.add(new Label(lexer.yytext()));
                         caracter = true;
                     } else {
                         errores.add(new Label(data));
                     }
-
+                    
+                   
                     break;
-                case CaracteresTable:
+                case Operadores:
                     if (lexer.yytext().equals(data)) {
-                        caracteresDB.add(new Label(lexer.yytext()));
+                        operadores.add(new Label(lexer.yytext()));
+                        caracterdb = true;
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case Columnas:
+                    if (lexer.yytext().equals(data)) {
+                        columnas.add(new Label(lexer.yytext()));
+                        caracterdb = true;
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case Digitos:
+                    if (lexer.yytext().equals(data)) {
+                        digitos.add(new Label(lexer.yytext()));
+                        caracterdb = true;
+                    } else {
+                        errores.add(new Label(data));
+                    }
+                    break;
+                case DB:
+                    if (lexer.yytext().equals(data)) {
+                        DB.add(new Label(lexer.yytext()));
                         caracterdb = true;
                     } else {
                         errores.add(new Label(data));
@@ -303,15 +348,9 @@ public class SintaxisListController implements Initializable {
                     break;
             }
 
-            if (caracterdb && caracter) {
-                return "*Caracter";
-            } else if (caracterdb) {
-                return "TituloCaracter";
-            } else if (caracter) {
-                return "Caracter";
-            } else {
-                return data;
-            }
+           
+            return data;
+            
             // }
         } catch (IOException ex) {
         }
