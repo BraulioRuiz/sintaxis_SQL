@@ -5,7 +5,7 @@
  */
 package Compiladores.Controllers;
 import Controllers.*;
-import Controllers.Lexico;
+import Compiladores.Controllers.Lexico;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +27,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import Controllers.Tokens;
+import Compiladores.Controllers.Tokens;
 import java.io.StringReader;
 import java.util.Stack;
 import java_cup.runtime.Symbol;

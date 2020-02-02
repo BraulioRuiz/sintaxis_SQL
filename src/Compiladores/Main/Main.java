@@ -24,7 +24,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent proyecto = FXMLLoader.load(getClass().getResource("/Views/SintaxisList.fxml"));
+        Parent proyecto = FXMLLoader.load(getClass().getResource("/Compiladores/Views/SintaxisList.fxml"));
         Scene semaforo = new Scene(proyecto);
 
         primaryStage.setScene(semaforo);

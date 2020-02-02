@@ -1,5 +1,5 @@
-package sintasissql;
-import static sintasissql.Tokens.*;
+package Compiladores.Main;
+import static Compiladores.Main.Tokens.*;
 
 %%
 %class Lexico
